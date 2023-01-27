@@ -1,4 +1,29 @@
-.container {
-  @include box();
+.HomeWrapper {
+  @include box(100vw, auto);
+  overflow-y: auto;
+  overflow-x: hidden;
   @include make-flex($just: flex-start);
+  gap: 20px;
+  &__hero {
+    @include box(calc(100% - 50px), 500px);
+    background-color: #ffec3a;
+    max-width: 1152px;
+    border-radius: 30px;
+    border: 1.5px solid;
+  }
+
+  &__promises {
+    @include box(calc(100% - 50px), 200px);
+    max-width: 1152px;
+    @include make-flex($dir: row, $just: space-around);
+
+    &--item {
+      @include box(100px, 100%);
+      @include make-flex();
+      gap: 15px;
+      img {
+        @include box(80%, auto);
+      }
+    }
+  }
 }

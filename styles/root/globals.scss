@@ -38,25 +38,13 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
-}
-
 html,
 body {
   @include box(100vw, 100vh);
 }
 
 #__next {
-  @include box();
+  @include box(100vw, 100vh);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
