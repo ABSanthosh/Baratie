@@ -5,9 +5,10 @@ import Link from "next/link";
 import useAuth from "../../hooks/useAuth";
 import { useRouter } from "next/router";
 
-function Header({ currentItem, user }) {
+function Header({ currentItem }) {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, logout, user } = useAuth();
+
   return (
     <div className="HeaderWrapper">
       <div className="Header">
@@ -51,13 +52,21 @@ function Header({ currentItem, user }) {
               onClick={async () => await login(router)}
             />
           ) : (
-            <Link href="/app/dashboard">
-              <a
+            <>
+              <Link href="/app/dashboard">
+                <a
+                  className="Header__actions--button dark"
+                  data-icon={String.fromCharCode(59505)}
+                  title="Cart"
+                />
+              </Link>
+              <button
                 className="Header__actions--button dark"
-                data-icon={String.fromCharCode(59505)}
-                title="Cart"
+                data-icon={String.fromCharCode(59834)}
+                title="Log out"
+                onClick={async () => await logout(router)}
               />
-            </Link>
+            </>
           )}
         </div>
       </div>

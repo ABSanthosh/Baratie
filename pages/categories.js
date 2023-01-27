@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FancyInput from "../components/FancyInput/FancyInput";
 import "../styles/routes/Categories.scss";
 import Header from "../components/Header/Header";
 import FancyButton from "../components/FancyButton/FancyButton";
+import useCart from "../hooks/useCart";
+import Modal from "../components/Modal/Modal";
+import useAuth from "../hooks/useAuth";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(ctx) {
-  // const { data } = await ;
   const data = [
     ...[...Array(20)].map((_, index) => ({
       id: index,
@@ -22,10 +25,36 @@ export async function getServerSideProps(ctx) {
 
 export default function Category({ data }) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { items, addToCart, removeFromCart } = useCart();
+  const [modalState, setModalState] = useState(false);
+  const { user, login } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log("items", items);
+  }, [items]);
 
   return (
     <div className="CategoryPage">
       <Header currentItem="categories" />
+      {modalState && (
+        <Modal
+          modalState={modalState}
+          setModalState={setModalState}
+          containerStyle={{
+            minHeight: "185px",
+            width: "485px",
+          }}
+        >
+          <div className="CategoryPage__modal">
+            <h2>You have to sign in first</h2>
+            <FancyButton onClick={async () => await login(router)}>
+              <img src="/Img/Googel.png" />
+              Sign in with Google
+            </FancyButton>
+          </div>
+        </Modal>
+      )}
       <section className="CategoryPage__main">
         <div
           className={`CategoryPage__filterBox CategoryPage__filterBox${
@@ -78,8 +107,8 @@ export default function Category({ data }) {
           </div>
         </div>
         <div className="CategoryPage__productListing">
-          {data.map((item) => (
-            <div className="CategoryPage__Item" key={item.id}>
+          {data.map((dataItem) => (
+            <div className="CategoryPage__Item" key={dataItem.id}>
               <img
                 className="CategoryPage__Item--image"
                 src="/Img/itemPlaceholder.png"
@@ -87,22 +116,44 @@ export default function Category({ data }) {
               />
 
               <div className="CategoryPage__Item--details">
-                <p className="CategoryPage__Item--title">{item.name}</p>
-                {/* <p>Quantity: {item.quantity}</p>
-                <p>Volume: {item.volume}</p> */}
+                <p className="CategoryPage__Item--title">
+                  {dataItem.name}({dataItem.id})
+                </p>
+                {/* <p>Quantity: {dataItem.quantity}</p>
+                <p>Volume: {dataItem.volume}</p> */}
                 <div>
-                  <span>${item.freight}</span>
+                  <span>${dataItem.freight}</span>
                 </div>
-                <FancyButton
-                  invertButton
-                  style={{
-                    height: "30px",
-                    width: "100%",
-                    fontSize: "12px",
-                  }}
-                >
-                  Add to Cart
-                </FancyButton>
+                {items.find((item) => item.id === dataItem.id) ? (
+                  <FancyButton
+                    style={{
+                      height: "30px",
+                      width: "100%",
+                      fontSize: "12px",
+                    }}
+                    onClick={() => removeFromCart(dataItem.id)}
+                  >
+                    Remove to Cart
+                  </FancyButton>
+                ) : (
+                  <FancyButton
+                    invertButton
+                    style={{
+                      height: "30px",
+                      width: "100%",
+                      fontSize: "12px",
+                    }}
+                    onClick={() => {
+                      if (user) {
+                        addToCart(dataItem);
+                      } else {
+                        setModalState(true);
+                      }
+                    }}
+                  >
+                    Add to Cart
+                  </FancyButton>
+                )}
               </div>
             </div>
           ))}
