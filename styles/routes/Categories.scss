@@ -1,0 +1,207 @@
+.CategoryPage {
+  @include make-flex($dir: column, $just: flex-start);
+  @include box($height: unset);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &__main {
+    @include box(100vw);
+    max-width: 1152px;
+    min-height: 580px;
+    position: relative;
+    margin-top: 123px;
+    margin-bottom: 30px;
+    @include make-flex($dir: row, $just: flex-start, $align: flex-start);
+
+    @include respondAt(1518px) {
+      width: 90vw;
+    }
+
+    @include respondAt(1016px) {
+      // height: 510px;
+    }
+    @include respondAt(840px) {
+      height: auto;
+      min-height: 600px;
+    }
+
+    @include respondAt(915px) {
+      margin-top: 80px;
+    }
+
+    & > h1 {
+      @include box($height: 70px);
+      text-transform: capitalize;
+    }
+
+    & > h3 {
+      @include box($height: 40px);
+    }
+
+    &--container {
+      // @include make-flex($dir: row, $align: flex-start, $just: space-between);
+      @include box($height: auto);
+
+      display: grid;
+      grid-template-columns: 316px 1fr;
+
+      @include respondAt(1010px) {
+        // flex-direction: column;
+        grid-template-columns: 1fr;
+        grid-template-rows: 40px 1fr;
+        gap: 20px;
+      }
+
+      & > .FancyButton__inverted {
+        display: none;
+
+        @include respondAt(1010px) {
+          display: flex;
+        }
+      }
+    }
+  }
+
+  &__filterBox {
+    @include box(316px, auto);
+    @include make-flex($just: flex-top);
+    @include respondAt(1010px) {
+      display: none;
+    }
+
+    &--activeFilterBox {
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      @include box();
+      @include make-flex();
+      background: rgba(0, 0, 0, 0.49);
+      backdrop-filter: blur(15px);
+    }
+
+    &--close {
+      position: absolute;
+      top: 8px;
+      right: 22px;
+      font-size: 30px;
+      z-index: 2;
+      cursor: pointer;
+      outline: none;
+      border: none;
+      background-color: white;
+      display: none;
+      &:hover {
+        color: #fe5349;
+      }
+
+      @include respondAt(1010px) {
+        display: flex;
+      }
+
+      @include respondAt(400px) {
+        top: 10px;
+      }
+
+      @include respondAt(555px) {
+        background-color: rgb(255, 255, 255);
+        border-radius: 10px 10px 0 0;
+        padding: 10px;
+        @include box(40px, 40px);
+        @include make-flex();
+        top: -39.5px;
+        right: -1.5px;
+        border: 1px solid #93b8e9;
+        border-bottom: 0;
+      }
+    }
+
+    &--contents {
+      border: 1px solid #dddddd;
+      border-radius: 6px;
+      padding: 23px;
+      background: #fff;
+      width: 316px;
+      @include make-flex($dir: column, $just: flex-start, $align: flex-start);
+      gap: 20px;
+      position: relative;
+
+      @include respondAt(555px) {
+        border-radius: 6px 0 6px 6px;
+      }
+    }
+
+    &--row {
+      @include box($height: auto);
+      @include make-flex($dir: row, $just: flex-start);
+      gap: 10px;
+
+      label {
+        user-select: none;
+        cursor: pointer;
+      }
+
+      input[type="checkbox"] {
+        color: #ffffff;
+        @include box(20px, 20px);
+        cursor: pointer;
+      }
+    }
+    &--column {
+      @include box($height: auto);
+      @include make-flex($align: flex-start);
+      gap: 10px;
+    }
+  }
+
+  &__productListing {
+    @include make-flex($dir: row, $just: flex-start);
+    flex-wrap: wrap;
+    gap: 20px;
+    @include box(100%, auto);
+    padding-left: 20px;
+
+    @include respondAt(1010px) {
+      width: 100%;
+      padding-left: unset;
+    }
+
+    .JobListing {
+      flex-grow: 1;
+    }
+  }
+
+  &__Item {
+    @include box(230px, 260px);
+    @include make-flex($just: flex-start);
+
+    border-radius: 10px;
+    border: 1px solid #dddddd;
+    padding: 20px;
+    gap: 20px;
+    &--image {
+      @include box(100%, auto);
+      border-radius: 5px;
+    }
+
+    span {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    &--title {
+      @include box(auto, auto);
+      @include make-flex($just: flex-start);
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    &--details {
+      @include box(100%, 100%);
+      @include make-flex($just: space-between, $align: flex-start);
+      gap: 10px;
+    }
+  }
+}
