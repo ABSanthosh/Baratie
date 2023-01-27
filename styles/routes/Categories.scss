@@ -65,6 +65,7 @@
   &__filterBox {
     @include box(316px, auto);
     @include make-flex($just: flex-top);
+    gap: 20px;
     @include respondAt(1010px) {
       display: none;
     }

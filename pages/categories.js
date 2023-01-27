@@ -24,15 +24,10 @@ export async function getServerSideProps(ctx) {
 }
 
 export default function Category({ data }) {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { items, addToCart, removeFromCart } = useCart();
   const [modalState, setModalState] = useState(false);
   const { user, login } = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    console.log("items", items);
-  }, [items]);
 
   return (
     <div className="CategoryPage">
@@ -56,18 +51,8 @@ export default function Category({ data }) {
         </Modal>
       )}
       <section className="CategoryPage__main">
-        <div
-          className={`CategoryPage__filterBox CategoryPage__filterBox${
-            isFilterOpen ? "--activeFilterBox" : ""
-          }`}
-        >
+        <div className={`CategoryPage__filterBox CategoryPage__filterBox`}>
           <div className="CategoryPage__filterBox--contents">
-            <button
-              className="CategoryPage__filterBox--close"
-              onClick={() => setIsFilterOpen(false)}
-            >
-              &#10799;
-            </button>
             <h2>Filters</h2>
             <div className="CategoryPage__filterBox--column">
               <h3>Experience</h3>
@@ -105,6 +90,19 @@ export default function Category({ data }) {
               </div>
             </div>
           </div>
+          {items.length > 0 && (
+            <FancyButton
+              style={{
+                width: "100%",
+              }}
+              onClick={() => {
+                localStorage.setItem("cart", JSON.stringify(items));
+                console.log("items", items);
+              }}
+            >
+              Checkout
+            </FancyButton>
+          )}
         </div>
         <div className="CategoryPage__productListing">
           {data.map((dataItem) => (

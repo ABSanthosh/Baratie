@@ -8,9 +8,44 @@ datasource db {
 }
 
 model User {
-  sub     String @id @unique
-  email   String @unique
-  name    String @db.VarChar(100)
-  picture String @default("")
-  locale  String @default("")
+  sub       String      @id @unique
+  email     String      @unique
+  name      String      @db.VarChar(100)
+  picture   String      @default("")
+  locale    String      @default("")
+  UserOrder UserOrder[]
+  Order     Order[]
+}
+
+model UserOrder {
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [userId], references: [sub])
+  order   Order  @relation(fields: [orderId], references: [id])
+  userId  String
+  orderId Int
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  user      User        @relation(fields: [userId], references: [sub])
+  userId    String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    OrderStatus @default(PENDING)
+  items     Item[]
+  UserOrder UserOrder[]
+}
+
+model Item {
+  id       Int   @id @default(autoincrement())
+  order    Order @relation(fields: [orderId], references: [id])
+  orderId  Int
+  quantity Int
+}
+
+enum OrderStatus {
+  ACCEPTED
+  PENDING
+  IN_TRANSIT
+  REJECTED
 }
